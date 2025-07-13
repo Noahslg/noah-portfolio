@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noah Salgado – Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Noah Salgado</h1>
+  </header>
+
+  <main id="project-list"></main>
+
+  <script src="js/site.js"></script>
+</body>
+</html>
+<hr>
+<h3>Paramètres d’affichage</h3>
+
+<label>Taille max image (en px) :</label>
+<input type="number" id="imgMaxWidth" value="400" min="50" max="1200" step="10">
+
+<label>Alignement du texte :</label>
+<select id="textAlign">
+  <option value="left">Gauche</option>
+  <option value="center" selected>Centré</option>
+  <option value="right">Droite</option>
+</select>
+
+<button onclick="appliquerStyle()">Appliquer</button>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admin Noah Salgado - Aperçu live</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+    margin: 0; padding: 2rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  h1 {
+    text-align: center;
+  }
+  .admin-panel {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  }
+  label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+  input[type="text"], textarea, select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  input[type="file"] {
+    margin-top: 0.5rem;
+  }
+  button {
+    margin-top: 1.5rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #0056b3;
+  }
+  hr {
+    margin: 2rem 0;
+  }
+
+  /* Aperçu projets */
+  .preview-list {
+    margin-top: 2rem;
+  }
+  .preview-item {
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 0 6px rgba(0,0,0,0.1);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .preview-item h3 {
+    margin: 0;
+  }
+  .preview-item p {
+    margin-top: 0.5rem;
+  }
+  .preview-item img {
+    max-width: 100%;
+    margin-top: 0.75rem;
+    border-radius: 6px;
+  }
+  .preview-item .actions {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+  .preview-item button {
+    background: #dc3545;
+    margin-left: 0.5rem;
+  }
+  .preview-item button.edit {
+    background: #28a745;
+  }
+  .preview-item button:hover {
+    opacity: 0.85;
+  }
+</style>
+</head>
+<body>
+
+<h1>Admin Noah Salgado - Aperçu Live</h1>
+
+<div class="admin-panel">
+  <label for="titre">Titre du projet</label>
+  <input type="text" id="titre" placeholder="Titre du projet" />
+
+  <label for="description">Description</label>
+  <textarea id="description" placeholder="Description du projet"></textarea>
+
+  <label for="image">Image</label>
+  <input type="file" id="image" accept="image/*" />
+
+  <label for="typo">Typographie</label>
+  <select id="typo">
+    <option value="sans-serif">Sans-serif</option>
+    <option value="serif">Serif</option>
+    <option value="monospace">Monospace</option>
+    <option value="cursive">Cursive</option>
+  </select>
+
+  <button id="ajouterBtn">Ajouter / Mettre à jour</button>
+
+  <hr />
+
+  <h2>Aperçu des projets</h2>
+  <div class="preview-list" id="previewList">
+    <!-- Les projets ajoutés apparaissent ici -->
+  </div>
+</div>
+
+<script>
+  let projets = [];
+  let editIndex = -1;
+
+  const titreInput = document.getElementById("titre");
+  const descInput = document.getElementById("description");
+  const imageInput = document.getElementById("image");
+  const typoSelect = document.getElementById("typo");
+  const ajouterBtn = document.getElementById("ajouterBtn");
+  const previewList = document.getElementById("previewList");
+
+  // Fonction pour afficher les projets dans l'aperçu
+  function afficherProjets() {
+    previewList.innerHTML = "";
+    projets.forEach((proj, i) => {
+      const div = document.createElement("div");
+      div.className = "preview-item";
+      div.style.fontFamily = proj.font;
+
+      const h3 = document.createElement("h3");
+      h3.textContent = proj.title;
+
+      const p = document.createElement("p");
+      p.textContent = proj.description;
+
+      div.appendChild(h3);
+      div.appendChild(p);
+
+      if (proj.image) {
+        const img = document.createElement("img");
+        img.src = proj.image;
+        div.appendChild(img);
+      }
+
+      // Boutons modifier / supprimer
+      const actions = document.createElement("div");
+      actions.className = "actions";
+
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "Modifier";
+      editBtn.className = "edit";
+      editBtn.onclick = () => modifierProjet(i);
+
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "Supprimer";
+      delBtn.onclick = () => supprimerProjet(i);
+
+      actions.appendChild(editBtn);
+      actions.appendChild(delBtn);
+      div.appendChild(actions);
+
+      previewList.appendChild(div);
+    });
+  }
+
+  // Ajouter ou mettre à jour un projet
+  ajouterBtn.onclick = () => {
+    const titre = titreInput.value.trim();
+    const description = descInput.value.trim();
+    const typo = typoSelect.value;
+
+    if (!titre) {
+      alert("Le titre est obligatoire !");
+      return;
+    }
+
+    // Gérer l'image
+    if (imageInput.files.length > 0) {
+      const file = imageInput.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        enregistrerProjet(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      enregistrerProjet(null);
+    }
+  };
+
+  function enregistrerProjet(imgData) {
+    const projetData = {
+      title: titreInput.value.trim(),
+      description: descInput.value.trim(),
+      image: imgData || (editIndex !== -1 ? projets[editIndex].image : null),
+      font: typoSelect.value
+    };
+
+    if (editIndex === -1) {
+      // Ajout nouveau projet
+      projets.push(projetData);
+    } else {
+      // Mise à jour projet existant
+      projets[editIndex] = projetData;
+      editIndex = -1;
+      ajouterBtn.textContent = "Ajouter / Mettre à jour";
+    }
+
+    // Réinitialiser le formulaire
+    titreInput.value = "";
+    descInput.value = "";
+    typoSelect.value = "sans-serif";
+    imageInput.value = "";
+
+    afficherProjets();
+  }
+
+  // Modifier un projet
+  function modifierProjet(index) {
+    editIndex = index;
+    const proj = projets[index];
+    titreInput.value = proj.title;
+    descInput.value = proj.description;
+    typoSelect.value = proj.font;
+    imageInput.value = ""; // pas possible de pré-remplir file input pour raisons de sécurité
+
+    ajouterBtn.textContent = "Mettre à jour le projet";
+  }
+
+  // Supprimer un projet
+  function supprimerProjet(index) {
+    if (confirm("Voulez-vous vraiment supprimer ce projet ?")) {
+      projets.splice(index, 1);
+      if (editIndex === index) {
+        editIndex = -1;
+        titreInput.value = "";
+        descInput.value = "";
+        typoSelect.value = "sans-serif";
+        imageInput.value = "";
+        ajouterBtn.textContent = "Ajouter / Mettre à jour";
+      }
+      afficherProjets();
+    }
+  }
+
+  // Initialisation
+  afficherProjets();
+</script>
+
+</body>
+</html>

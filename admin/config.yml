@@ -1,0 +1,19 @@
+backend:
+  name: github
+  repo: Noahslg/noah-portfolio
+  branch: main
+
+media_folder: "media"
+public_folder: "/media"
+
+collections:
+  - name: "projects"
+    label: "Projets"
+    folder: "projects"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Titre", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Image", name: "image", widget: "image" }
+      - { label: "Typographie", name: "font", widget: "select", options: ["sans-serif", "serif", "monospace", "cursive"] }

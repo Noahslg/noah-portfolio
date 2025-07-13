@@ -1,99 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <title>Admin - Noah Salgado</title>
-  <style>
-    body { font-family: sans-serif; padding: 2rem; background: #fff; color: #111; }
-    input, textarea, select, button {
-      display: block;
-      width: 100%;
-      margin-bottom: 1rem;
-      padding: 0.5rem;
-      font-size: 1rem;
-    }
-  </style>
-</head>
-<body>
-  <h1>Admin - Portfolio Noah Salgado</h1>
-
-  <div id="admin-interface" style="display:none;">
-    <input type="text" id="titre" placeholder="Titre du projet" />
-    <textarea id="description" placeholder="Description du projet"></textarea>
-    <input type="file" accept="image/*" id="image" />
-    <select id="typo">
-      <option value="sans-serif">Sans-serif</option>
-      <option value="serif">Serif</option>
-      <option value="monospace">Monospace</option>
-      <option value="cursive">Cursive</option>
-    </select>
-    <button onclick="ajouterProjet()">Ajouter</button>
-    <button onclick="deconnecter()">Déconnexion</button>
-  </div>
-
-  <script>
-    const mdpAdmin = 'noah1234';
-
-    function afficherAdmin() {
-      document.getElementById('admin-interface').style.display = 'block';
-    }
-
-    function cacherAdmin() {
-      document.getElementById('admin-interface').style.display = 'none';
-    }
-
-    function connecter() {
-      const pass = prompt('Mot de passe admin :');
-      if (pass === mdpAdmin) {
-        localStorage.setItem('adminLoggedIn', 'true');
-        afficherAdmin();
-      } else {
-        alert('Mot de passe incorrect');
-        cacherAdmin();
-      }
-    }
-
-    function verifierConnexion() {
-      if (localStorage.getItem('adminLoggedIn') === 'true') {
-        afficherAdmin();
-      } else {
-        connecter();
-      }
-    }
-
-    function deconnecter() {
-      localStorage.removeItem('adminLoggedIn');
-      cacherAdmin();
-      alert('Déconnecté');
-      connecter();
-    }
-
-    verifierConnexion();
-
-    function ajouterProjet() {
-      const titre = document.getElementById("titre").value;
-      const description = document.getElementById("description").value;
-      const image = document.getElementById("image").files[0];
-      const typo = document.getElementById("typo").value;
-
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const projet = {
-          titre,
-          description,
-          image: e.target.result,
-          typo
-        };
-        console.log("Projet ajouté :", projet);
-        alert("Projet ajouté (à brancher sur le site principal)");
-      };
-
-      if (image) {
-        reader.readAsDataURL(image);
-      } else {
-        alert("Merci d’ajouter une image.");
-      }
-    }
-  </script>
-</body>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin - Noah Salgado Portfolio</title>
+  </head>
+  <body>
+    <!-- Chargement du CMS -->
+    <script src="https://unpkg.com/netlify-cms@^2.10.0/dist/netlify-cms.js"></script>
+  </body>
 </html>

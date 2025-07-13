@@ -16,4 +16,11 @@ collections:
       - { label: "Titre", name: "title", widget: "string" }
       - { label: "Description", name: "description", widget: "text" }
       - { label: "Image", name: "image", widget: "image" }
-      - { label: "Typographie", name: "font", widget: "select", options: ["sans-serif", "serif", "monospace", "cursive"] }
+      - label: "Typographie"
+        name: "font"
+        widget: "select"
+        options:
+          - "sans-serif"
+          - "serif"
+          - "monospace"
+          - "cursive"
